@@ -10,6 +10,7 @@ create table t_user(
 	id int default nextval('t_user_id_seq') not null,
 	name varchar(255) not null,
 	username varchar(255) not null,
+	password varchar(255) not null,
 	primary key (id)
 );
 -- 用户 end

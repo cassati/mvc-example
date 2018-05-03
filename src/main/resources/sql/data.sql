@@ -1,16 +1,16 @@
 
 -- 用户
-insert into t_user(name, username) values 
-('刘一', 'liuyi'),
-('陈二', 'chener'),
-('张三', 'zhangsan'),
-('李四', 'lisi'),
-('王五', 'wangwu'),
-('赵六', 'zhaoliu'),
-('孙七', 'sunqi'),
-('周八', 'zhouba'),
-('吴九', 'wujiu'),
-('郑十', 'zhengshi');
+insert into t_user(name, username, password) values
+('刘一', 'liuyi', '123456'),
+('陈二', 'chener', '123456'),
+('张三', 'zhangsan', '123456'),
+('李四', 'lisi', '123456'),
+('王五', 'wangwu', '123456'),
+('赵六', 'zhaoliu', '123456'),
+('孙七', 'sunqi', '123456'),
+('周八', 'zhouba', '123456'),
+('吴九', 'wujiu', '123456'),
+('郑十', 'zhengshi', '123456');
 
 -- 组织
 insert into t_org(parent_id, org_name, org_code) values 
