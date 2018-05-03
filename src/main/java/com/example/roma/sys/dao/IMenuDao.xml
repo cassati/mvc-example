@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.example.roma.sys.dao.IMenuDao">
+	
+	<sql id="Base_Column_List">
+	    <![CDATA[
+		id,menu_name,menu_code,permission
+	    ]]>
+	</sql>
+
+	<sql id="byParams">
+		<where>
+	       <if test="id != null">
+				AND id = #{id}
+			</if>
+	       <if test="menuName != null">
+				AND menu_name = #{menuName}
+			</if>
+	       <if test="menuCode != null">
+				AND menu_code = #{menuCode}
+			</if>
+	       <if test="permission != null">
+				AND permission = #{permission}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="save" parameterType="Menu">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+	        select nextval('t_menu_id_seq') as id
+		</selectKey>
+        INSERT INTO t_menu (
+        	id ,
+        	menu_name ,
+        	menu_code ,
+        	permission 
+        ) VALUES (
+        	#{id ,jdbcType = INTEGER} ,
+        	#{menuName ,jdbcType = VARCHAR} ,
+        	#{menuCode ,jdbcType = VARCHAR} ,
+        	#{permission ,jdbcType = VARCHAR} 
+        )
+	</insert>
+
+	<insert id="batchSave" parameterType="Menu" >
+		 INSERT INTO t_menu  (
+        	menu_name ,
+        	menu_code ,
+        	permission 
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">(
+        	#{item.menuName ,jdbcType = VARCHAR} ,
+        	#{item.menuCode ,jdbcType = VARCHAR} ,
+        	#{item.permission ,jdbcType = VARCHAR} 
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="Menu" >
+        UPDATE t_menu 
+		<set>
+				<if test="menuName != null">
+				menu_name = #{menuName} ,
+				</if>
+				<if test="menuCode != null">
+				menu_code = #{menuCode} ,
+				</if>
+				<if test="permission != null">
+				permission = #{permission} 
+				</if>
+		</set>
+		WHERE  id =#{id}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM t_menu WHERE
+        id =#{id}
+    </delete>
+
+    <delete id="delete" parameterType="Menu">
+        DELETE FROM t_menu 
+        <include refid="byParams"/>   
+    </delete>
+
+	<select id="get" resultType="Menu" parameterType="java.lang.Integer" >
+		select 
+		<include refid="Base_Column_List" />
+		from t_menu 
+		WHERE  id = #{id}
+	</select>
+
+	<select id="queryByParams" resultType="Menu">
+		select 
+		<include refid="Base_Column_List" />
+		from t_menu 
+		<include refid="byParams"/>    
+	</select>
+
+	<select id="queryAll" resultType="Menu" >
+		select 
+		<include refid="Base_Column_List" />
+		from t_menu 
+	</select>
+
+</mapper>
+

@@ -1,6 +1,11 @@
 package com.example.roma.sys.controller;
 
+import com.example.framework.core.db.page.Page;
+import com.example.roma.sys.entity.User;
+import com.example.roma.sys.service.IUserService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +23,9 @@ import java.util.Map;
 public class IndexController {
 
     private static Logger log = Logger.getLogger(IndexController.class);
+
+    @Autowired
+    private IUserService userService;
 
     @RequestMapping(value = "main.do")
     public String main(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -42,6 +50,25 @@ public class IndexController {
 
         retMap.put("datas", datas);
         retMap.put("size", 100);
+        return retMap;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "users.do")
+    public Map<String, Object> users(HttpServletRequest request, HttpServletResponse response, Model model,
+                                     Integer pageNo) {
+        log.debug("in the users");
+        Map<String, Object> retMap = new HashMap<>();
+
+        Page page = new Page();
+        page.setPageSize(4);
+        if (pageNo != null && pageNo > 0) {
+            page.setPageNo(pageNo);
+        }
+        page = userService.queryAll(page);
+
+        retMap.put("datas", page.getResult());
+        retMap.put("size", CollectionUtils.isEmpty(page.getResult()) ? 0 : page.getResult().size());
         return retMap;
     }
 

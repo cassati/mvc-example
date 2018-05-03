@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.example.roma.sys.dao.IRoleMenuDao">
+	
+	<sql id="Base_Column_List">
+	    <![CDATA[
+		role_id,menu_id
+	    ]]>
+	</sql>
+
+	<sql id="byParams">
+		<where>
+	       <if test="roleId != null">
+				AND role_id = #{roleId}
+			</if>
+	       <if test="menuId != null">
+				AND menu_id = #{menuId}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="save" parameterType="RoleMenu">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+	        select nextval('t_role_menu_id_seq') as id
+		</selectKey>
+        INSERT INTO t_role_menu (
+        	role_id ,
+        	menu_id 
+        ) VALUES (
+        	#{roleId ,jdbcType = INTEGER} ,
+        	#{menuId ,jdbcType = INTEGER} 
+        )
+	</insert>
+
+	<insert id="batchSave" parameterType="RoleMenu" >
+		 INSERT INTO t_role_menu  (
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">(
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="RoleMenu" >
+        UPDATE t_role_menu 
+		<set>
+		</set>
+		WHERE  role_id =#{roleId}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM t_role_menu WHERE
+        role_id =#{roleId}
+    </delete>
+
+    <delete id="delete" parameterType="RoleMenu">
+        DELETE FROM t_role_menu 
+        <include refid="byParams"/>   
+    </delete>
+
+	<select id="get" resultType="RoleMenu" parameterType="java.lang.Integer" >
+		select 
+		<include refid="Base_Column_List" />
+		from t_role_menu 
+		WHERE  role_id = #{roleId}
+	</select>
+
+	<select id="queryByParams" resultType="RoleMenu">
+		select 
+		<include refid="Base_Column_List" />
+		from t_role_menu 
+		<include refid="byParams"/>    
+	</select>
+
+	<select id="queryAll" resultType="RoleMenu" >
+		select 
+		<include refid="Base_Column_List" />
+		from t_role_menu 
+	</select>
+
+</mapper>
+

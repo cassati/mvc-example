@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.example.roma.sys.dao.IUserRoleDao">
+	
+	<sql id="Base_Column_List">
+	    <![CDATA[
+		user_id,role_id
+	    ]]>
+	</sql>
+
+	<sql id="byParams">
+		<where>
+	       <if test="userId != null">
+				AND user_id = #{userId}
+			</if>
+	       <if test="roleId != null">
+				AND role_id = #{roleId}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="save" parameterType="UserRole">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+	        select nextval('t_user_role_id_seq') as id
+		</selectKey>
+        INSERT INTO t_user_role (
+        	user_id ,
+        	role_id 
+        ) VALUES (
+        	#{userId ,jdbcType = INTEGER} ,
+        	#{roleId ,jdbcType = INTEGER} 
+        )
+	</insert>
+
+	<insert id="batchSave" parameterType="UserRole" >
+		 INSERT INTO t_user_role  (
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">(
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="UserRole" >
+        UPDATE t_user_role 
+		<set>
+		</set>
+		WHERE  user_id =#{userId}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM t_user_role WHERE
+        user_id =#{userId}
+    </delete>
+
+    <delete id="delete" parameterType="UserRole">
+        DELETE FROM t_user_role 
+        <include refid="byParams"/>   
+    </delete>
+
+	<select id="get" resultType="UserRole" parameterType="java.lang.Integer" >
+		select 
+		<include refid="Base_Column_List" />
+		from t_user_role 
+		WHERE  user_id = #{userId}
+	</select>
+
+	<select id="queryByParams" resultType="UserRole">
+		select 
+		<include refid="Base_Column_List" />
+		from t_user_role 
+		<include refid="byParams"/>    
+	</select>
+
+	<select id="queryAll" resultType="UserRole" >
+		select 
+		<include refid="Base_Column_List" />
+		from t_user_role 
+	</select>
+
+</mapper>
+

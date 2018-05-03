@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.example.roma.sys.dao.IOrgDao">
+	
+	<sql id="Base_Column_List">
+	    <![CDATA[
+		id,parent_id,org_name,org_code
+	    ]]>
+	</sql>
+
+	<sql id="byParams">
+		<where>
+	       <if test="id != null">
+				AND id = #{id}
+			</if>
+	       <if test="parentId != null">
+				AND parent_id = #{parentId}
+			</if>
+	       <if test="orgName != null">
+				AND org_name = #{orgName}
+			</if>
+	       <if test="orgCode != null">
+				AND org_code = #{orgCode}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="save" parameterType="Org">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+	        select nextval('t_org_id_seq') as id
+		</selectKey>
+        INSERT INTO t_org (
+        	id ,
+        	parent_id ,
+        	org_name ,
+        	org_code 
+        ) VALUES (
+        	#{id ,jdbcType = INTEGER} ,
+        	#{parentId ,jdbcType = INTEGER} ,
+        	#{orgName ,jdbcType = VARCHAR} ,
+        	#{orgCode ,jdbcType = VARCHAR} 
+        )
+	</insert>
+
+	<insert id="batchSave" parameterType="Org" >
+		 INSERT INTO t_org  (
+        	parent_id ,
+        	org_name ,
+        	org_code 
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">(
+        	#{item.parentId ,jdbcType = INTEGER} ,
+        	#{item.orgName ,jdbcType = VARCHAR} ,
+        	#{item.orgCode ,jdbcType = VARCHAR} 
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="Org" >
+        UPDATE t_org 
+		<set>
+				<if test="parentId != null">
+				parent_id = #{parentId} ,
+				</if>
+				<if test="orgName != null">
+				org_name = #{orgName} ,
+				</if>
+				<if test="orgCode != null">
+				org_code = #{orgCode} 
+				</if>
+		</set>
+		WHERE  id =#{id}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM t_org WHERE
+        id =#{id}
+    </delete>
+
+    <delete id="delete" parameterType="Org">
+        DELETE FROM t_org 
+        <include refid="byParams"/>   
+    </delete>
+
+	<select id="get" resultType="Org" parameterType="java.lang.Integer" >
+		select 
+		<include refid="Base_Column_List" />
+		from t_org 
+		WHERE  id = #{id}
+	</select>
+
+	<select id="queryByParams" resultType="Org">
+		select 
+		<include refid="Base_Column_List" />
+		from t_org 
+		<include refid="byParams"/>    
+	</select>
+
+	<select id="queryAll" resultType="Org" >
+		select 
+		<include refid="Base_Column_List" />
+		from t_org 
+	</select>
+
+</mapper>
+
