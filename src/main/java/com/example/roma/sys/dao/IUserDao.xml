@@ -104,5 +104,32 @@
 		from t_user 
 	</select>
 
+	<select id="queryUserRole" resultType="User" resultMap="userRoleMap">
+		select u.id as u_id,
+			u.name as u_name,
+			u.username as u_username,
+			u.password as u_password,
+
+			r.id as r_id,
+			r.role_name as role_name,
+			r.role_code as role_code
+		from t_user u
+		left join t_user_role ur on ur.user_id = u.id
+		left join t_role r on r.id = ur.role_id
+		order by u.id asc
+	</select>
+
+	<resultMap id="userRoleMap" type="User">
+		<result property="id" column="u_id" />
+		<result property="name" column="u_name" />
+		<result property="username" column="u_username" />
+		<result property="password" column="u_password" />
+
+		<collection property="roles" ofType="Role">
+			<result property="id" column="r_id" />
+			<result property="roleName" column="role_name" />
+			<result property="roleCode" column="role_code" />
+		</collection>
+	</resultMap>
 </mapper>
 

@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 
 import com.example.framework.core.base.entity.BaseEntity;
 
+import java.util.List;
+
 public class User extends BaseEntity{
 	
 	@Max(9999999999L)
@@ -22,6 +24,8 @@ public class User extends BaseEntity{
 	private java.lang.String username;
 	@NotBlank @Length(max=255)
 	private java.lang.String password;
+
+	private List<Role> roles;
 
 
 	public void setId(java.lang.Integer value) {
@@ -52,6 +56,17 @@ public class User extends BaseEntity{
 	public java.lang.String getPassword() {
 		return this.password;
 	}
+
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	@Override
 	public String toString() {
 		return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
 			.append("Id:",getId()+" ")

@@ -25,4 +25,6 @@ public interface IUserService{
 	public List<User> queryAll();
 
 	public Page queryAll(Page page);
+
+	public Page queryUserRole(Page page);
 }

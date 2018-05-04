@@ -15,4 +15,6 @@ public interface IUserDao extends IBaseDao<User>{
 
 	public List<User> queryAll(Page page);
 
+	public List<User> queryUserRole(Page page);
+
 }

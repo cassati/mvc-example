@@ -72,4 +72,23 @@ public class IndexController {
         return retMap;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "userRoles.do")
+    public Map<String, Object> userRoles(HttpServletRequest request, HttpServletResponse response, Model model,
+                                     Integer pageNo) {
+        log.debug("in the userRoles");
+        Map<String, Object> retMap = new HashMap<>();
+
+        Page page = new Page();
+        page.setPageSize(4);
+        if (pageNo != null && pageNo > 0) {
+            page.setPageNo(pageNo);
+        }
+        page = userService.queryUserRole(page);
+
+        retMap.put("datas", page.getResult());
+        retMap.put("size", CollectionUtils.isEmpty(page.getResult()) ? 0 : page.getResult().size());
+        return retMap;
+    }
+
 }

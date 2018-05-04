@@ -76,4 +76,12 @@ public class UserService implements IUserService{
         page.setResult(userList);
         return page;
     }
+
+    @Override
+	public Page queryUserRole(Page page) {
+		List<User> userList = this.userDao.queryUserRole(page);
+		page.setResult(userList);
+		return page;
+	}
+
 }
