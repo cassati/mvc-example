@@ -19,4 +19,8 @@
 	<!-- 配置 JSR303 Bean Validator 定义 -->
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
+	<!-- 缓存配置 -->
+	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:cache/ehcache-local.xml" />
+	</bean>
 </beans>
