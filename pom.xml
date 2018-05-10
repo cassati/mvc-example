@@ -94,6 +94,13 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <!-- spring jms -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
         <!-- bean validate -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -301,6 +308,13 @@
             <scope>test</scope>
         </dependency>
         <!-- TEST end -->
+
+        <!-- activemq -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.9.1</version>
+        </dependency>
     </dependencies>
 
     <build>
