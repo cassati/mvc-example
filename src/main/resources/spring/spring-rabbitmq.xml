@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+     xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/rabbit
+     http://www.springframework.org/schema/rabbit/spring-rabbit-2.0.xsd"
+	default-lazy-init="true">
+
+	<description>Spring rabbitmq Configuration</description>
+
+	<!-- RabbitMQ start -->
+	<!-- 连接配置 -->
+	<rabbit:connection-factory id="connectionFactory" host="127.0.0.1" username="admin"
+							   password="admin" port="5672"  />
+
+	<!--通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器上自动生成 -->
+	<rabbit:admin id="connectAdmin" connection-factory="connectionFactory"/>
+
+	<!-- 消息队列客户端 -->
+	<rabbit:template id="amqpTemplateDirect" exchange="direct_exchange" connection-factory="connectionFactory"  />
+	<rabbit:template id="amqpTemplateTopic" exchange="topic_exchange" connection-factory="connectionFactory"  />
+	<rabbit:template id="amqpTemplateFanout" exchange="fanout_exchange" connection-factory="connectionFactory"  />
+
+	<!-- queue 队列声明 -->
+	<!--
+        durable 是否持久化
+        exclusive 仅创建者可以使用的私有队列，断开后自动删除
+        auto-delete 当所有消费端连接断开后，是否自动删除队列 -->
+	<rabbit:queue id="direct_queue1" name="direct_queue1" durable="true" auto-delete="false" exclusive="false" />
+	<rabbit:queue id="direct_queue2" name="direct_queue2" durable="true" auto-delete="false" exclusive="false" />
+	<rabbit:queue id="direct_queue3" name="direct_queue3" durable="true" auto-delete="false" exclusive="false" />
+	<rabbit:queue id="topic_queue1" name="topic_queue1" durable="true" auto-delete="false" exclusive="false" />
+	<rabbit:queue id="topic_queue2" name="topic_queue2" durable="true" auto-delete="false" exclusive="false" />
+	<rabbit:queue id="topic_queue3" name="topic_queue3" durable="true" auto-delete="false" exclusive="false" />
+	<rabbit:queue id="fanout_queue1" name="fanout_queue1" durable="true" auto-delete="false" exclusive="false" />
+	<rabbit:queue id="fanout_queue2" name="fanout_queue2" durable="true" auto-delete="false" exclusive="false" />
+
+	<!-- 交换机定义 -->
+	<!--
+        交换机：一个交换机可以绑定多个队列，一个队列也可以绑定到多个交换机上。
+        如果没有队列绑定到交换机上，则发送到该交换机上的信息则会丢失。
+
+        direct模式:消息与一个特定的路由器完全匹配，才会转发
+        topic模式:按模式匹配
+     -->
+	<rabbit:direct-exchange name="direct_exchange" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="direct_queue1" key="to_direct_key"/>
+			<rabbit:binding queue="direct_queue2" key="to_direct_key"/>
+			<rabbit:binding queue="direct_queue3" key="to_direct_key_another"/>
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+	<rabbit:topic-exchange name="topic_exchange" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="topic_queue1" pattern="patt.topic.queue.*"/>
+			<rabbit:binding queue="topic_queue2" pattern="patt.topic.queue.*"/>
+			<rabbit:binding queue="topic_queue3" pattern="patt.topic.queue3.*"/>
+		</rabbit:bindings>
+	</rabbit:topic-exchange>
+	<rabbit:fanout-exchange name="fanout_exchange" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="fanout_queue1" />
+			<rabbit:binding queue="fanout_queue2" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<bean name="direct1Listener" class="com.example.roma.sys.rabbitmq.listener.Direct1Listener"></bean>
+	<bean name="direct2Listener" class="com.example.roma.sys.rabbitmq.listener.Direct2Listener"></bean>
+	<bean name="direct3Listener" class="com.example.roma.sys.rabbitmq.listener.Direct3Listener"></bean>
+	<bean name="topic1Listener" class="com.example.roma.sys.rabbitmq.listener.Topic1Listener"></bean>
+	<bean name="topic2Listener" class="com.example.roma.sys.rabbitmq.listener.Topic2Listener"></bean>
+	<bean name="topic3Listener" class="com.example.roma.sys.rabbitmq.listener.Topic3Listener"></bean>
+	<bean name="fanout1Listener" class="com.example.roma.sys.rabbitmq.listener.Fanout1Listener"></bean>
+	<bean name="fanout2Listener" class="com.example.roma.sys.rabbitmq.listener.Fanout2Listener"></bean>
+
+	<!-- 配置监听 消费者 -->
+	<rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto">
+		<!--
+            queues 监听队列，多个用逗号分隔
+            ref 监听器 -->
+		<rabbit:listener queues="direct_queue1" ref="direct1Listener" method="listen"/>
+		<rabbit:listener queues="direct_queue2" ref="direct2Listener" method="listen"/>
+		<rabbit:listener queues="direct_queue3" ref="direct3Listener" method="listen"/>
+		<rabbit:listener queues="fanout_queue1" ref="fanout1Listener" method="listen"/>
+		<rabbit:listener queues="fanout_queue2" ref="fanout2Listener" method="listen"/>
+		<rabbit:listener queues="topic_queue1" ref="topic1Listener" method="listen"/>
+		<rabbit:listener queues="topic_queue2" ref="topic2Listener" method="listen"/>
+		<rabbit:listener queues="topic_queue3" ref="topic3Listener" method="listen"/>
+	</rabbit:listener-container>
+
+</beans>
