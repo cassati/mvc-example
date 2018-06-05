@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd"
+	default-lazy-init="true">
+
+	<description>Shiro Configuration</description>
+	<context:property-placeholder ignore-unresolvable="true" order="2" location="classpath:base.properties" />
+	
+	<!-- 权限验证与授权-->
+	<bean id="exampleAuthorizingRealm" class="com.example.roma.sys.shiro.realm.ExampleAuthorizingRealm">
+	</bean>
+
+	<!-- 校验同时登录人数-->
+	<bean id="onLineFilter" class="com.example.roma.sys.shiro.filter.OnLineControlFilter">
+	</bean>
+	<!-- 安全认证过滤器 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="${cas.service.prefix}/login?service=${cas.service.url}" />
+		<property name="successUrl" value="/sys/main.do" />
+		<property name="filters">
+            <map>
+                <entry key="online" value-ref="onLineFilter"/>
+            </map>
+        </property>
+		<property name="filterChainDefinitions">
+			<value>
+				/static/** = anon
+				/sys/unauthorized.do = anon
+				/sys/logout.do = anon
+				/sys/login.do = onLineFilter
+				/** =user
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 定义Shiro安全管理配置 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realms">
+			<util:list>
+                <ref bean="exampleAuthorizingRealm" />
+            </util:list>
+		</property>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+
+	<!-- 自定义会话管理配置  start-->
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<!-- 会话超时时间，单位：毫秒  -->
+		<property name="globalSessionTimeout" value="1800000"/>
+		<!-- 定时清理失效会话, 清理用户直接关闭浏览器造成的孤立会话   -->
+		<property name="sessionValidationInterval" value="1800000"/>
+		<property name="sessionValidationSchedulerEnabled" value="true"/>
+		<property name="sessionIdCookieEnabled" value="true"/>
+		<property name="sessionIdCookie" ref="shiroSessionIdCookie"/>
+	</bean>
+	<!-- 自定义会话管理配置  end-->
+	<!-- 会话Cookie模板 -->
+	<bean id="shiroSessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<constructor-arg name="name" value="z.session.id"/>
+	</bean>
+
+	<!-- Shiro生命周期处理器[保证实现了Shiro内部lifecycle函数的bean执行] -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+	<!-- 支持Shiro对Controller的方法级AOP安全控制 begin-->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"/>
+	</bean>
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
+				<prop key="java.lang.Throwable">error/500</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- 支持Shiro对Controller的方法级AOP安全控制 end -->
+</beans>
