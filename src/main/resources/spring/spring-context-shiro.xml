@@ -9,22 +9,26 @@
 
 	<description>Shiro Configuration</description>
 	<context:property-placeholder ignore-unresolvable="true" order="2" location="classpath:base.properties" />
-	
+
+	<bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+		<property name="usernameParam" value="username"/>
+		<property name="passwordParam" value="password"/>
+		<property name="loginUrl" value="/login.jsp"/>
+	</bean>
+
 	<!-- 权限验证与授权-->
 	<bean id="exampleAuthorizingRealm" class="com.example.roma.sys.shiro.realm.ExampleAuthorizingRealm">
 	</bean>
 
-	<!-- 校验同时登录人数-->
-	<bean id="onLineFilter" class="com.example.roma.sys.shiro.filter.OnLineControlFilter">
-	</bean>
 	<!-- 安全认证过滤器 -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="${cas.service.prefix}/login?service=${cas.service.url}" />
+		<property name="loginUrl" value="/sys/login.do" />
 		<property name="successUrl" value="/sys/main.do" />
+		<property name="unauthorizedUrl" value="/sys/unauthorized.do"/>
 		<property name="filters">
             <map>
-                <entry key="online" value-ref="onLineFilter"/>
+				<entry key="authc" value-ref="formAuthenticationFilter"/>
             </map>
         </property>
 		<property name="filterChainDefinitions">
@@ -32,8 +36,9 @@
 				/static/** = anon
 				/sys/unauthorized.do = anon
 				/sys/logout.do = anon
-				/sys/login.do = onLineFilter
-				/** =user
+				/sys/login.do = anon
+				/sys/authenticated.do = authc
+				/** = user
 			</value>
 		</property>
 	</bean>
