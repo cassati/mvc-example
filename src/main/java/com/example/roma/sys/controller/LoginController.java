@@ -45,15 +45,21 @@ public class LoginController {
 
         if (error != null) {
             model.addAttribute("error", error);
-            return "login";
+            return "redirect:/login.do";
         }
-        return "authenticated";
+        return "redirect:/authenticated.do";
     }
 
     @RequestMapping(value = "logout.do")
     public String logout(HttpServletRequest request, HttpServletResponse response, Model model) {
         log.debug("in the logout");
-        return "logout";
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.logout();
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+        }
+        return "redirect:/login.do";
     }
 
     @RequestMapping(value = "unauthorized.do")
