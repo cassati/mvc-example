@@ -1,8 +1,9 @@
 package com.example.roma.sys.service;
 
-import java.util.List;
-import com.example.roma.sys.entity.Role;
 import com.example.framework.core.db.page.Page;
+import com.example.roma.sys.entity.Role;
+
+import java.util.List;
 
 public interface IRoleService{
 	
@@ -25,4 +26,6 @@ public interface IRoleService{
 	public List<Role> queryAll();
 
 	public Page queryAll(Page page);
+
+	public List<Role> queryByUsername(String username);
 }

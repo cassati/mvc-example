@@ -12,6 +12,7 @@
 
 	<!-- 权限验证与授权-->
 	<bean id="exampleAuthorizingRealm" class="com.example.roma.sys.shiro.realm.ExampleAuthorizingRealm">
+        <property name="userService" ref="userService"/>
 	</bean>
 
 	<!-- 安全认证过滤器 -->

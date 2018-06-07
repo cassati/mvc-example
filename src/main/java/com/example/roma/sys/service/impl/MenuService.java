@@ -4,7 +4,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import com.example.roma.sys.entity.Menu;
 import com.example.roma.sys.dao.IMenuDao;
 import com.example.roma.sys.service.IMenuService;
@@ -76,4 +79,12 @@ public class MenuService implements IMenuService{
         page.setResult(menuList);
         return page;
     }
+
+    @Override
+	public List<Menu> queryByUsername(String username) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("username", username);
+		List<Menu> menuList = this.menuDao.queryByUsername(params);
+		return menuList;
+	}
 }

@@ -1,6 +1,8 @@
 package com.example.roma.sys.service;
 
 import java.util.List;
+import java.util.Set;
+
 import com.example.roma.sys.entity.User;
 import com.example.framework.core.db.page.Page;
 
@@ -27,4 +29,10 @@ public interface IUserService{
 	public Page queryAll(Page page);
 
 	public Page queryUserRole(Page page);
+
+	public User getByUsername(String username);
+
+	public Set<String> queryUserMenus(String username);
+
+	public Set<String> queryUserRoles(String username);
 }

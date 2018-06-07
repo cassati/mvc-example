@@ -1,22 +1,33 @@
 package com.example.roma.sys.service.impl;
 
-import org.springframework.transaction.annotation.Transactional;
+import com.example.framework.core.db.page.Page;
+import com.example.roma.sys.dao.IUserDao;
+import com.example.roma.sys.entity.Menu;
+import com.example.roma.sys.entity.Role;
+import com.example.roma.sys.entity.User;
+import com.example.roma.sys.service.IMenuService;
+import com.example.roma.sys.service.IRoleService;
+import com.example.roma.sys.service.IUserService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
-import com.example.roma.sys.entity.User;
-import com.example.roma.sys.dao.IUserDao;
-import com.example.roma.sys.service.IUserService;
-import com.example.framework.core.db.page.Page;
+import java.util.Set;
 
 @Service
 public class UserService implements IUserService{
 
 	@Autowired
     private IUserDao userDao;
-	
-	@Override
+	@Autowired
+    private IRoleService roleService;
+	@Autowired
+	private IMenuService menuService;
+
+    @Override
 	@Transactional
 	public int save(User user){
 		return this.userDao.save(user);
@@ -84,4 +95,34 @@ public class UserService implements IUserService{
 		return page;
 	}
 
+	@Override
+	public User getByUsername(String username) {
+		User params = new User();
+		params.setUsername(username);
+		List<User> users = queryByParams(params);
+		if (CollectionUtils.isNotEmpty(users)) {
+			return users.get(0);
+		}
+		return null;
+	}
+
+    @Override
+	public Set<String> queryUserMenus(String username) {
+        List<Menu> menus = this.menuService.queryByUsername(username);
+        Set<String> menuSet = new HashSet<>();
+        for (Menu m : menus) {
+            menuSet.add(m.getMenuCode());
+        }
+        return menuSet;
+	}
+
+	@Override
+    public Set<String> queryUserRoles(String username) {
+        List<Role> roles = this.roleService.queryByUsername(username);
+        Set<String> roleSet = new HashSet<>();
+        for (Role r : roles) {
+            roleSet.add(r.getRoleCode());
+        }
+        return roleSet;
+    }
 }

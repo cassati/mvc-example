@@ -94,5 +94,18 @@
 		from t_role 
 	</select>
 
+	<select id="queryByUsername" resultType="Role">
+		select
+		<include refid="Base_Column_List" />
+		from t_role
+		where id in (
+			select role_id from t_user_role
+			where user_id = (
+				select id from t_user where username = #{username}
+			)
+		)
+		order by id asc
+	</select>
+
 </mapper>
 

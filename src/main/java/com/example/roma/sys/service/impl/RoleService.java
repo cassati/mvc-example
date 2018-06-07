@@ -4,7 +4,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import com.example.roma.sys.entity.Role;
 import com.example.roma.sys.dao.IRoleDao;
 import com.example.roma.sys.service.IRoleService;
@@ -76,4 +79,11 @@ public class RoleService implements IRoleService{
         page.setResult(roleList);
         return page;
     }
+
+    @Override
+	public List<Role> queryByUsername(String username) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("username", username);
+		return this.roleDao.queryByUsername(params);
+	}
 }

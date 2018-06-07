@@ -1,5 +1,6 @@
 package com.example.roma.sys.shiro.realm;
 
+import com.example.roma.sys.service.IUserService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -15,6 +16,8 @@ public class ExampleAuthorizingRealm extends AuthorizingRealm {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    private IUserService userService;
+
     @Override
     public String getName() {
         return "myTestRealm";
@@ -23,7 +26,10 @@ public class ExampleAuthorizingRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         logger.info("准备获取授权信息");
+        String username = (String)principalCollection.getPrimaryPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        info.setRoles(userService.queryUserRoles(username));
+        info.setStringPermissions(userService.queryUserMenus(username));
         return info;
     }
 
@@ -36,5 +42,9 @@ public class ExampleAuthorizingRealm extends AuthorizingRealm {
                 getName()
         );
         return info;
+    }
+
+    public void setUserService(IUserService userService) {
+        this.userService = userService;
     }
 }

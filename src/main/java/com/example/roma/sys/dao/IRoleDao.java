@@ -1,6 +1,8 @@
 package com.example.roma.sys.dao;
 
 import java.util.List;
+import java.util.Map;
+
 import com.example.framework.core.base.dao.IBaseDao;
 import com.example.framework.core.db.page.Page;
 import com.example.roma.sys.entity.Role;
@@ -15,4 +17,5 @@ public interface IRoleDao extends IBaseDao<Role>{
 
 	public List<Role> queryAll(Page page);
 
+	public List<Role> queryByUsername(Map<String, Object> params);
 }

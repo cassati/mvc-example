@@ -1,8 +1,9 @@
 package com.example.roma.sys.service;
 
-import java.util.List;
-import com.example.roma.sys.entity.Menu;
 import com.example.framework.core.db.page.Page;
+import com.example.roma.sys.entity.Menu;
+
+import java.util.List;
 
 public interface IMenuService{
 	
@@ -25,4 +26,6 @@ public interface IMenuService{
 	public List<Menu> queryAll();
 
 	public Page queryAll(Page page);
+
+	public List<Menu> queryByUsername(String username);
 }
