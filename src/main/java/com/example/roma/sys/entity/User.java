@@ -24,6 +24,8 @@ public class User extends BaseEntity{
 	private java.lang.String username;
 	@NotBlank @Length(max=255)
 	private java.lang.String password;
+	private java.lang.String salt;
+	private java.lang.String remark;
 
 	private List<Role> roles;
 
@@ -57,6 +59,21 @@ public class User extends BaseEntity{
 		return this.password;
 	}
 
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 
 	public List<Role> getRoles() {
 		return roles;

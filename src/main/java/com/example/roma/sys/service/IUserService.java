@@ -35,4 +35,6 @@ public interface IUserService{
 	public Set<String> queryUserMenus(String username);
 
 	public Set<String> queryUserRoles(String username);
+
+	public void createUser(User user);
 }

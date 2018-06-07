@@ -9,6 +9,8 @@ import com.example.roma.sys.service.IMenuService;
 import com.example.roma.sys.service.IRoleService;
 import com.example.roma.sys.service.IUserService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -125,4 +127,19 @@ public class UserService implements IUserService{
         }
         return roleSet;
     }
+
+    @Override
+	@Transactional
+	public void createUser(User user) {
+        String algorithmName = "md5";
+        String password = user.getPassword();
+        String salt1 = user.getUsername();
+        String salt2 = new SecureRandomNumberGenerator().nextBytes().toHex();
+        int hashIterations = 2;
+        SimpleHash hash = new SimpleHash(algorithmName, password, salt1 + salt2, hashIterations);
+
+        user.setPassword(hash.toHex());
+        user.setSalt(salt2);
+        this.save(user);
+	}
 }

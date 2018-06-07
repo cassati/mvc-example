@@ -17,10 +17,11 @@
   </head>
   <body>
     <form action="reallogin.do" method="post">
-      <div>${error}</div>
-      <label for="username">用户名：</label><input type="text" id="username" name="username" /><br/>
-      <label for="password">密码：</label><input type="password" id="password" name="password" /><br/>
-      <button type="submit">登录</button>
+        <label for="username">用户名：</label><input type="text" id="username" name="username" /><br/>
+        <label for="password">密码：</label><input type="password" id="password" name="password" /><br/>
+        <button type="submit">登录</button>
+        <br/>
+        <div style="color: red;">${error}</div>
     </form>
   </body>
 </html>

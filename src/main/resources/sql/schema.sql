@@ -11,6 +11,8 @@ create table t_user(
 	name varchar(255) not null,
 	username varchar(255) not null,
 	password varchar(255) not null,
+	salt varchar(255),
+	remark varchar(255),
 	primary key (id)
 );
 -- 用户 end

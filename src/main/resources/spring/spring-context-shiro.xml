@@ -10,9 +10,16 @@
 	<description>Shiro Configuration</description>
 	<context:property-placeholder ignore-unresolvable="true" order="2" location="classpath:base.properties" />
 
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="2"/>
+        <property name="storedCredentialsHexEncoded" value="true"/>
+    </bean>
+
 	<!-- 权限验证与授权-->
 	<bean id="exampleAuthorizingRealm" class="com.example.roma.sys.shiro.realm.ExampleAuthorizingRealm">
         <property name="userService" ref="userService"/>
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
 	</bean>
 
 	<!-- 安全认证过滤器 -->

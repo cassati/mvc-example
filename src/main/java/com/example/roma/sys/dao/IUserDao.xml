@@ -6,7 +6,7 @@
 	
 	<sql id="Base_Column_List">
 	    <![CDATA[
-		id,name,username,password
+		id,name,username,password,salt,remark
 	    ]]>
 	</sql>
 
@@ -24,6 +24,12 @@
 	       <if test="password != null">
 				AND password = #{password}
 			</if>
+	       <if test="salt != null">
+				AND salt = #{salt}
+			</if>
+	       <if test="remark != null">
+				AND remark = #{remark}
+			</if>
 		</where>
 	</sql>
 
@@ -35,12 +41,16 @@
         	id ,
         	name ,
         	username ,
-        	password 
+        	password ,
+			salt,
+			remark
         ) VALUES (
         	#{id ,jdbcType = INTEGER} ,
         	#{name ,jdbcType = VARCHAR} ,
         	#{username ,jdbcType = VARCHAR} ,
-        	#{password ,jdbcType = VARCHAR} 
+        	#{password ,jdbcType = VARCHAR},
+        	#{salt ,jdbcType = VARCHAR},
+        	#{remark ,jdbcType = VARCHAR}
         )
 	</insert>
 
@@ -48,12 +58,16 @@
 		 INSERT INTO t_user  (
         	name ,
         	username ,
-        	password 
+        	password ,
+			salt,
+			remark
 		) VALUES
 		<foreach collection="list" item="item" index="index" separator=",">(
         	#{item.name ,jdbcType = VARCHAR} ,
         	#{item.username ,jdbcType = VARCHAR} ,
-        	#{item.password ,jdbcType = VARCHAR} 
+        	#{item.password ,jdbcType = VARCHAR},
+        	#{item.salt ,jdbcType = VARCHAR},
+        	#{item.remark ,jdbcType = VARCHAR}
 			)
 		</foreach>
 	</insert>
@@ -68,7 +82,13 @@
 				username = #{username} ,
 				</if>
 				<if test="password != null">
-				password = #{password} 
+				password = #{password} ,
+				</if>
+				<if test="salt != null">
+					salt = #{salt} ,
+				</if>
+				<if test="remark != null">
+					remark = #{remark}
 				</if>
 		</set>
 		WHERE  id =#{id}
@@ -109,6 +129,8 @@
 			u.name as u_name,
 			u.username as u_username,
 			u.password as u_password,
+			u.salt as u_salt,
+			u.remark as u_remark,
 
 			r.id as r_id,
 			r.role_name as role_name,
@@ -124,6 +146,8 @@
 		<result property="name" column="u_name" />
 		<result property="username" column="u_username" />
 		<result property="password" column="u_password" />
+		<result property="salt" column="u_salt" />
+		<result property="remark" column="u_remark" />
 
 		<collection property="roles" ofType="Role">
 			<result property="id" column="r_id" />

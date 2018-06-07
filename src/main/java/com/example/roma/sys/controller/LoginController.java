@@ -1,5 +1,6 @@
 package com.example.roma.sys.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -21,8 +22,11 @@ public class LoginController {
     private static Logger log = Logger.getLogger(LoginController.class);
 
     @RequestMapping(value = "login.do")
-    public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String login(HttpServletRequest request, HttpServletResponse response, Model model, String error) {
         log.debug("in the login");
+        if (StringUtils.isNoneBlank(error)) {
+            model.addAttribute("error", error);
+        }
         return "login";
     }
 
