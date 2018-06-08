@@ -8,6 +8,7 @@ import com.example.roma.sys.entity.User;
 import com.example.roma.sys.service.IMenuService;
 import com.example.roma.sys.service.IRoleService;
 import com.example.roma.sys.service.IUserService;
+import com.example.roma.sys.shiro.util.HashUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -129,16 +130,13 @@ public class UserService implements IUserService{
     }
 
     @Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void createUser(User user) {
-        String algorithmName = "md5";
         String password = user.getPassword();
         String salt1 = user.getUsername();
         String salt2 = new SecureRandomNumberGenerator().nextBytes().toHex();
-        int hashIterations = 2;
-        SimpleHash hash = new SimpleHash(algorithmName, password, salt1 + salt2, hashIterations);
 
-        user.setPassword(hash.toHex());
+        user.setPassword(HashUtil.hashMd5SaltedWithIterations(password, salt1 + salt2));
         user.setSalt(salt2);
         this.save(user);
 	}
