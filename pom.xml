@@ -513,6 +513,9 @@
                     <port>${webserver.port}</port>
                     <path>/${project.artifactId}</path>
                     <uriEncoding>${project.build.sourceEncoding}</uriEncoding>
+                    <httpsPort>8443</httpsPort>
+                    <keystoreFile>D:\\data\\cert\\keys_jdk7.keystore</keystoreFile>
+                    <keystorePass>123456</keystorePass>
                 </configuration>
             </plugin>
         </plugins>
