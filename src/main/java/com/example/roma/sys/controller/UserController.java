@@ -4,6 +4,7 @@ import com.example.roma.sys.entity.User;
 import com.example.roma.sys.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,12 +27,14 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+    @RequiresPermissions("sys:user:add")
     @RequestMapping(value = "addUser.do")
     public String addUser(HttpServletRequest request, HttpServletResponse response, Model model) {
         log.debug("in the addUser");
         return "/user/addUser";
     }
 
+    @RequiresPermissions("sys:user:add")
     @ResponseBody
     @RequestMapping(value = "saveUser.do")
     public String saveUser(HttpServletRequest request, HttpServletResponse response, Model model, User user) {

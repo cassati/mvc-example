@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2005-2012 springside.org.cn
  */
-package com.example.framework.springside;
+package com.example.framework.core.springside;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

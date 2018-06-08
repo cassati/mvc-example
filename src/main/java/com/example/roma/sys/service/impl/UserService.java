@@ -114,7 +114,7 @@ public class UserService implements IUserService{
         List<Menu> menus = this.menuService.queryByUsername(username);
         Set<String> menuSet = new HashSet<>();
         for (Menu m : menus) {
-            menuSet.add(m.getMenuCode());
+            menuSet.add(m.getPermission());
         }
         return menuSet;
 	}

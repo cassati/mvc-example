@@ -1,5 +1,4 @@
-package com.example.framework.cache;
-
+package com.example.framework.core.common.cache;
 
 import com.example.framework.core.springside.SpringContextHolder;
 import net.sf.ehcache.Cache;
@@ -8,6 +7,8 @@ import net.sf.ehcache.Element;
 
 /**
  * EhCache工具类
+ * @author liaoyp
+ * @version 2016年7月15日
  */
 public class EhCacheUtils {
 

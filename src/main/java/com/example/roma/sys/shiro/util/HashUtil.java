@@ -1,6 +1,6 @@
 package com.example.roma.sys.shiro.util;
 
-import com.example.framework.springside.SpringContextHolder;
+import com.example.framework.core.springside.SpringContextHolder;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.crypto.hash.SimpleHash;
 

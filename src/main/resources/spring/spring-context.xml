@@ -14,7 +14,7 @@
 	</context:component-scan>
 	
 	<!-- 注放ApplicationContext实例 -->
-	<bean id="springContextHolder" class="com.example.framework.springside.SpringContextHolder" lazy-init="false" />
+	<bean id="springContextHolder" class="com.example.framework.core.springside.SpringContextHolder" lazy-init="false" />
     
 	<!-- 配置 JSR303 Bean Validator 定义 -->
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />

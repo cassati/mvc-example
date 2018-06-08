@@ -1,6 +1,6 @@
 package com.example.roma.sys.controller;
 
-import com.example.framework.springside.SpringContextHolder;
+import com.example.framework.core.springside.SpringContextHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.amqp.AmqpException;
